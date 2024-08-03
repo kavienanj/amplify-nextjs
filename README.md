@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Amplify Next.js Example
+This is an example of how to use Amplify with Next.js.
+
+## Prerequisites
+- Node.js
+- npm
+- AWS Account
+- AWS CLI
 
 ## Getting Started
-
-First, run the development server:
-
+1. Create a new Next.js app
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx create-next-app@latest amplify-nextjs-example
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Change into the new app directory
+```bash
+cd amplify-nextjs-example
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Install dependencies
+```bash
+npm add --save-dev @aws-amplify/backend@latest @aws-amplify/backend-cli@latest typescript
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+4. Next, create the entry point for your backend, `amplify/backend.ts`, with the following code:
+```typescript
+import { defineBackend } from '@aws-amplify/backend';
+// import { auth } from './auth/resource';
 
-## Learn More
+defineBackend({
+  // auth,
+});
 
-To learn more about Next.js, take a look at the following resources:
+// Uncomment auth if auth is defined in auth/resource
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. You can use define* functions to define your resources. For example, you can define authentication:
+```typescript
+import { defineAuth } from '@aws-amplify/backend';
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+export const auth = defineAuth({
+  loginWith: {
+    email: true
+  }
+});
+```
 
-## Deploy on Vercel
+6. Now you can create your backend by running the following command, this will create `amplify_outputs.json` inside `src/app` directory:
+```bash
+npx ampx sandbox --outputs-out-dir=src/app
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+6. Connect your app to the backend by adding the following code to `src/app/page.tsx`:
+```tsx
+"use client";
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+import { Amplify } from 'aws-amplify';
+import outputs from "./amplify_outputs.json";
+
+// Use Authenticator library to handle authentication logic and UI
+import { Authenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+
+Amplify.configure(outputs);
+
+export default function Home() {
+  return (
+    <Authenticator>
+      {({ signOut, user }) => (
+        <main className="...">
+          ...
+        </main>
+      )}
+    </Authenticator>
+  );
+}
+```
+
+7. Run your app
+```bash
+npm run dev
+```
