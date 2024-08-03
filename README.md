@@ -7,6 +7,13 @@ This is an example of how to use Amplify with Next.js.
 - AWS Account
 - AWS CLI
 
+Make sure you have the AWS CLI installed and configured with your AWS account. For example, you can export your AWS credentials as environment variables:
+```bash
+export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_ACCESS_KEY=...
+export AWS_SESSION_TOKEN=...
+```
+
 ## Getting Started
 1. Create a new Next.js app
 ```bash
