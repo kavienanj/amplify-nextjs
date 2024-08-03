@@ -17,12 +17,12 @@ export AWS_SESSION_TOKEN=...
 ## Getting Started
 1. Create a new Next.js app
 ```bash
-npx create-next-app@latest amplify-nextjs-example
+npx create-next-app@latest amplify-nextjs
 ```
 
 2. Change into the new app directory
 ```bash
-cd amplify-nextjs-example
+cd amplify-nextjs
 ```
 
 3. Install dependencies
